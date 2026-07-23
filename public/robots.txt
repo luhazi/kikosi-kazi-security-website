@@ -1,0 +1,12 @@
+# robots.txt — Kikosi Kazi Security
+User-agent: *
+Disallow: /admin
+Disallow: /candidate
+Disallow: /login
+Disallow: /register
+Disallow: /password
+Disallow: /email
+Disallow: /dashboard
+
+# TODO: replace https://www.kikosikazi.co.tz with the live domain before go-live
+Sitemap: https://www.kikosikazi.co.tz/sitemap.xml
