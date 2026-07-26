@@ -1,28 +1,48 @@
-FROM php:8.5-cli
+FROM php:8.3-cli
 
 WORKDIR /var/www
 
-RUN apt-get update && apt-get install -y \
-    unzip \
-    git \
-    curl \
-    libzip-dev \
-    sqlite3 \
-    libsqlite3-dev \
-    && docker-php-ext-install zip pdo_sqlite
+# System libraries + PHP extensions Laravel needs (mbstring, gd, zip, bcmath,
+# exif, pdo_sqlite). Building these here is what most failed Render deploys miss.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        git \
+        curl \
+        unzip \
+        zip \
+        sqlite3 \
+        libzip-dev \
+        libonig-dev \
+        libpng-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
+        libxml2-dev \
+        libsqlite3-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" pdo_sqlite zip mbstring gd bcmath exif \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install PHP dependencies first for layer caching.
+# --no-scripts prevents `artisan package:discover` from running before the app
+# environment exists (a common build-time failure); it runs at container start.
+COPY composer.json composer.lock ./
+RUN composer install \
+        --no-dev \
+        --no-scripts \
+        --no-interaction \
+        --prefer-dist \
+        --optimize-autoloader
+
+# Copy the application source and rebuild the optimised autoloader (no scripts).
 COPY . .
+RUN composer dump-autoload --no-scripts --optimize
 
-RUN composer install --no-dev --optimize-autoloader
+# Writable directories + executable start script.
+RUN chmod -R 775 storage bootstrap/cache \
+    && chmod +x docker/start.sh
 
-RUN touch database/database.sqlite
-
-RUN php artisan storage:link || true
-
-RUN chmod -R 775 storage bootstrap/cache
-
+# Render injects $PORT; the start script binds to it (defaults to 10000).
 EXPOSE 10000
 
-CMD php artisan serve --host=0.0.0.0 --port=10000
+CMD ["sh", "docker/start.sh"]

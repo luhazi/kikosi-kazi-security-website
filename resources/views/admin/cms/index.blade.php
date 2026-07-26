@@ -153,10 +153,10 @@
                             <label class="form-label fw-semibold small">Category <span class="text-danger">*</span></label>
                             <select name="category" class="form-select form-select-sm @error('category') is-invalid @enderror" required>
                                 <option value="">-- Select --</option>
-                                <option value="security"  {{ old('category') === 'security'  ? 'selected' : '' }}>Security</option>
-                                <option value="hr"        {{ old('category') === 'hr'        ? 'selected' : '' }}>HR Consultancy</option>
-                                <option value="insurance" {{ old('category') === 'insurance' ? 'selected' : '' }}>Insurance</option>
-                                <option value="cleaning"  {{ old('category') === 'cleaning'  ? 'selected' : '' }}>Cleaning</option>
+                                <option value="security"  {{ old('category') === 'security'  ? 'selected' : '' }}>Security &amp; Risk Management</option>
+                                <option value="hr"        {{ old('category') === 'hr'        ? 'selected' : '' }}>Human Capital Solutions</option>
+                                <option value="insurance" {{ old('category') === 'insurance' ? 'selected' : '' }}>Insurance Advisory &amp; Brokerage</option>
+                                <option value="cleaning"  {{ old('category') === 'cleaning'  ? 'selected' : '' }}>Facility Management Services</option>
                             </select>
                             @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
@@ -786,10 +786,10 @@
                         <div class="col-md-3">
                             <label class="form-label fw-semibold small">Category <span class="text-danger">*</span></label>
                             <select name="category" id="edit_category" class="form-select form-select-sm" required>
-                                <option value="security">Security</option>
-                                <option value="hr">HR Consultancy</option>
-                                <option value="insurance">Insurance</option>
-                                <option value="cleaning">Cleaning</option>
+                                <option value="security">Security &amp; Risk Management</option>
+                                <option value="hr">Human Capital Solutions</option>
+                                <option value="insurance">Insurance Advisory &amp; Brokerage</option>
+                                <option value="cleaning">Facility Management Services</option>
                             </select>
                         </div>
                         <div class="col-12">

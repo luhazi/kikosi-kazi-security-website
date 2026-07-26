@@ -1,0 +1,49 @@
+# Render Blueprint — Kikosi Kazi Security
+# https://render.com/docs/blueprint-spec
+# You can either import this Blueprint (New → Blueprint) OR just copy these
+# environment variables into your existing service's Environment tab.
+
+services:
+  - type: web
+    name: kikosi-kazi-security
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free                 # upgrade to 'starter' to attach a persistent disk (see bottom)
+    region: frankfurt          # closest Render region to Tanzania
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: APP_NAME
+        value: Kikosi Kazi Security
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false            # REQUIRED — set in dashboard: run `php artisan key:generate --show` locally and paste (base64:...)
+      - key: APP_URL
+        sync: false            # set to your live https URL after the first deploy, e.g. https://kikosi-kazi-security.onrender.com
+      - key: LOG_CHANNEL
+        value: stderr          # stream logs into Render's log viewer
+      - key: DB_CONNECTION
+        value: sqlite
+      # Session/cache/queue use drivers that need no extra tables or worker — robust for preview
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_STORE
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+
+# ── Production data persistence (needs a paid plan) ─────────────────────────
+# Free instances have an ephemeral disk — data resets on every deploy. To keep
+# jobs, candidates, CMS content and uploads, upgrade the plan and add:
+#
+#   disk:
+#     name: data
+#     mountPath: /var/data
+#     sizeGB: 1
+#
+# then set an env var  DB_DATABASE = /var/data/database.sqlite
+# (and move uploads onto the disk — see DEPLOYMENT.md).

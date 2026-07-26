@@ -24,7 +24,7 @@
         'mission' => ['Mission, Vision & Core Values', 'What drives us — and the principles that guide everything we do.'],
         'partner' => ['Why Partner With Us', 'The advantages of choosing Kikosi Kazi as your services partner.'],
     ];
-    [$heroTitle, $heroSub] = $heroData[$sec] ?? ['About Kikosi Kazi Security', 'Your Trusted Partner for Security, HR, Insurance & Cleaning Services'];
+    [$heroTitle, $heroSub] = $heroData[$sec] ?? ['About Kikosi Kazi Security', 'Integrated Security, Human Capital, Insurance & Facility Management Solutions'];
     $heroCrumb = $heroData[$sec][0] ?? 'About Us';
 @endphp
 

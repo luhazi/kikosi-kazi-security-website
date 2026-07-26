@@ -1,0 +1,35 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Dependencies (rebuilt inside the image)
+/vendor
+/node_modules
+
+# Local environment & secrets (provided by the host at runtime)
+.env
+.env.*
+!.env.example
+
+# Local SQLite database (a fresh one is created in the container / on the disk)
+/database/database.sqlite
+/database/*.sqlite
+
+# Laravel runtime caches & logs
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/storage/app/public/*
+/public/storage
+/bootstrap/cache/*.php
+
+# Dev / editor / docs
+/.zcode
+/tests
+*.md
+!README.md
+.editorconfig
+.styleci.yml
+phpunit.xml
