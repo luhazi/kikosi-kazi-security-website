@@ -84,11 +84,13 @@ class ClientLogoSeeder extends Seeder
             ['name' => 'DDW Cars',                                      'logo_path' => 'Clients-50.png', 'website' => 'https://www.ddwcars.co.tz', 'category' => 'corporate', 'sort_order' => 121],
         ];
 
-        // Clear existing clients to avoid duplicates on re-run
-        Client::query()->delete();
-
+        // Idempotent: match on name so re-running (on every container boot) neither
+        // duplicates these clients nor wipes any added later via the admin panel.
         foreach ($clients as $client) {
-            Client::create(array_merge($client, ['is_active' => true]));
+            Client::updateOrCreate(
+                ['name' => $client['name']],
+                array_merge($client, ['is_active' => true])
+            );
         }
 
         $this->command->info(count($clients) . ' clients seeded across ' . collect($clients)->pluck('category')->unique()->count() . ' categories.');
